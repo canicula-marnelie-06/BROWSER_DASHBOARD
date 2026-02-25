@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Environment Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.5s ease; /* Smooth transition for color changes */
+            color: #333;
+        }
+
+        /* Profile Section Styling */
+        .profile-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 50px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 10px rgb(4, 241, 205);
+        }
+        .profile-header h2 { margin-top: 0; border-bottom: 1px solid #f104aa; padding-bottom: 10px; }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        /* Dashboard Sections */
+        .dashboard-section  h2 { margin-top: 0; border-bottom: 1px solid #f104aa; padding-bottom: 10px; }
+        .dashboard-section {
+            background-color: #2c3e50;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 10px rgb(4, 241, 205);
+        }
+
+        h2 { color: #077cf0; border-left: 5px solid #f104aa; padding-left: 10px; }
+
+        .info-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .label { font-weight: bold; color: #1e61f2; }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+        button:hover { background-color: #e10bec; }
+        button.nav-btn { background-color: #27ae60; }
+        button.nav-btn:hover { background-color: #e10bec;}
+        button.danger { background-color: #e74c3c; }
+        button.danger:hover { background-color: #c0392b; }
+    </style>
+</head>
+<body>
+
+    <!-- PART 0: PROFILE INFORMATION -->
+    <div class="profile-header">
+        <h2>STUDENT PROFILE </h2>
+        <div class="profile-grid">
+           <div><span class="label">Complete Name:</span> Marnelie D. Canicula </div>
+                <div><span class="label">Sex:</span> Female </div>
+                <div><span class="label">Address:</span> Zone 1, Turague Sagnay Cam. Sur </div>
+                <div><span class="label">Course, Year & Section:</span> BSIT, 2nd Year, Section D </div>
+                <div><span class="label">Name of School:</span> Partido State University </div>
+                <div><span class="label">Semester & Academic Year:</span> 1st Semester, 2025-2026 </div>
+                <div><span class="label">Course Code & Title:</span> PF2 - Event Driven Programming</div>
+                <div><span class="label">Subject Instructor:</span> Mr. Arjay F. Abio </div>
+        </div>
+    </div>
+
+    <!-- PART A: BROWSER INFORMATION -->
+    <div class="dashboard-section" id="part-a">
+        <h2> BROWSER INFORMATION </h2>
+        <div id="browser-output">
+            <!-- Content injected via JavaScript -->
+        </div>
+    </div>
+
+    <!-- PART B: PAGE INFORMATION AND CONTROLS -->
+    <div class="dashboard-section" id="part-b">
+        <h2> PAGE INFORMATION AND CONTROLS </h2>
+        <div class="info-item"><span class="label">Current URL:</span> <span id="info-url"> Loading... </span></div>
+        <div class="info-item"><span class="label">Hostname:</span> <span id="info-host"> Loading...  </span></div>
+        <div class="info-item"><span class="label">Current Page Title:</span> <span id="info-title"> Loading... </span></div>
+        
+        <button onclick="updatePageTitle()">Change Page Title</button>
+    </div>
+
+    <!-- PART C: NAVIGATION CONTROLS -->
+    <div class="dashboard-section" id="part-c">
+        <h2>NAVIGATION CONTROLS </h2>
+        <p>Use the buttons below to control navigation:</p>
+        <button class="nav-btn" onclick="reloadPage()">Reload Page</button>
+        <button class="nav-btn" onclick="goToExample()">Go to Example.com</button>
+        <button class="nav-btn" onclick="goBack()">Back</button>
+        <button class="nav-btn" onclick="goForward()">Forward</button>
+    </div>
+
+    <!-- PART D: DYNAMIC STYLING -->
+    <div class="dashboard-section" id="part-d">
+        <h2> DYNAMIC STYLING </h2>
+        <p>Current Window Width: <span id="width-display"></span>px</p>
+        <p>Background color changes automatically based on resize:</p>
+        <ul>
+            <li>Mobile (&lt;600px): Blue</li>
+            <li>Tablet (600px - 991px): Green</li>
+            <li>Desktop (≥992px): Orange</li>
+        </ul>
+    </div>
+
+    <script>
+        /**
+         * README: Browser Environment Dashboard
+         * This file demonstrates the usage of JavaScript Browser Objects.
+         * It collects data from Navigator, Screen, Location, History, and Window objects.
+         */
+
+        // === PART A: Display Browser Information ===
+        function getBrowserInfo() {
+            // Helper to parse user agent for name
+            const ua = navigator.userAgent;
+            let browserName = "Unknown";
+            let match = ua.match(/(opera|chrome|safari|firefox|edge|msie|trident(?=\/))\/?\s*(\d+)/i);
+            if (match != null) {
+                if (/trident/i.test(match[1])) {
+                    let rv = ua.match(/\brv[ :]+(\d+)/);
+                    browserName = (rv != null) ? 'IE ' + rv[1] : 'IE';
+                } else if (match[1] === 'Chrome') {
+                    let edge = ua.match(/\b(Edg)\/(\d+)/);
+                    if (edge != null) browserName = 'Edge (Chromium)';
+                    else browserName = 'Chrome';
+                } else {
+                    browserName = match[1];
+                }
+            }
+
+            // Get Browser Version
+            let version = "Unknown";
+            let vMatch = ua.match(/version\/(\d+)/);
+            if (vMatch) version = vMatch[1];
+            else if (match && match[2]) version = match[2];
+
+            const infoHTML = `
+                <div class="info-item"><span class="label">Browser Name: </span> ${browserName}</div>
+                <div class="info-item"><span class="label">Browser Version: </span> ${version}</div>
+                <div class="info-item"><span class="label">Platform (OS): </span> ${navigator.platform}</div>
+                <div class="info-item"><span class="label">Java Enabled: </span> ${navigator.javaEnabled() ? "Yes" : "No"}</div>
+                <div class="info-item"><span class="label">Screen Resolution: </span> ${screen.width} x ${screen.height}</div>
+                <div class="info-item"><span class="label">Available Screen Size: </span> ${screen.availWidth} x ${screen.availHeight}</div>
+                <div class="info-item"><span class="label">Color Depth: </span> ${screen.colorDepth}-bit</div>
+            `;
+            document.getElementById('browser-output').innerHTML = infoHTML;
+        }
+
+        // === PART B: Page Information and Controls ===
+        function displayPageInfo() {
+        // 1. Get the hostname
+        var host = window.location.hostname;
+
+        // 2. If hostname is empty (meaning file is opened directly), show this message:
+        if (host === "") {
+        host = "Running locally (No Hostname)";
+        }
+
+        // 3. Display the information
+        document.getElementById('info-url').textContent = window.location.href;
+        document.getElementById('info-host').textContent = host;
+        document.getElementById('info-title').textContent = document.title;
+        }
+
+        function updatePageTitle() {
+            // Prompt user for new title and update DOM
+            let newTitle = prompt("Enter the new title for this page:", document.title);
+            if (newTitle != null && newTitle.trim() !== "") {
+                document.title = newTitle;
+                // Update the display in the dashboard as well
+                document.getElementById('info-title').textContent = newTitle;
+            }
+        }
+
+        // === PART C: Navigation Controls ===
+        function reloadPage() {
+            location.reload();
+        }
+
+        function goToExample() {
+            if(confirm("Redirect to https://www.google.com?")) {
+                location.href = "https://www.google.com";
+            }
+        }
+
+        function goBack() {
+            history.back();
+        }
+
+        function goForward() {
+            history.forward();
+        }
+
+        // === PART D: Dynamic Styling with Screen Info ===
+        function updateStyle() {
+            const width = window.innerWidth;
+            const body = document.body;
+            
+            // Update text display
+            document.getElementById('width-display').textContent = width;
+
+            // Determine color based on width
+            if (width < 600) {
+                body.style.backgroundColor = "blue";
+            } else if (width >= 600 && width <= 991) {
+                body.style.backgroundColor = "green";
+            } else {
+                body.style.backgroundColor = "Pink";
+            }
+
+            // Adjust text color for readability on darker backgrounds
+            if (width >= 992) {
+                body.style.color = "white"; // Orange background needs white text
+            } else {
+                body.style.color = "white"; // Blue and Green also look best with white
+            }
+        }
+
+        // === INITIALIZATION ===
+        window.onload = function() {
+            getBrowserInfo();
+            displayPageInfo();
+            updateStyle(); // Initial call for Part D
+        };
+
+        // Event listener for resizing
+        window.onresize = updateStyle;
+
+    </script>
+</body>
+</html>

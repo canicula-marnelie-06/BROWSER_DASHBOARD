@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Guessing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #14098d;
+            color: #00000e;
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 88vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* For pseudo-element positioning */
+            text-align: center;
+            margin: 50px;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('gamme.png'); /* image URL */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 1.5; /* Adjust for transparency (0.1 to 1.0) */
+            z-index: -1; /* Behind content */
+            pointer-events: none; /* Doesn't interfere with interactions */
+        }
+        #game-container {
+            max-width: 500px;
+            max-height: 700px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 70px;
+            background: rgb(164, 153, 130);
+            border-radius: 30px;
+            box-shadow: 0 8px 16px rgba(10, 155, 228, 0.912);
+            transition: background 0.3s;
+            background-color:rgba(99, 110, 121, 0.5);
+            box-shadow: inset -5px -5px rgba(51, 5, 220, 0.5);
+            border-radius: 50px;
+           
+        }   
+        input {
+                 /* Style for the text box where user types */
+            padding: 10px;
+            font-size: 16px;
+            width: 200px;
+            border-radius: 10px;
+        }
+        input:focus {
+            border-color: #f90c6f;
+            outline: none;
+        }
+        button {
+            /* Style for the action buttons */
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            border-radius: 10px;
+        }
+        button:focus {
+            border-color: #f0069a;
+            outline: none;
+        }
+        #feedback {
+            /* Area to display messages like 'Correct!' or 'Try again' */
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        #hint {
+            /* Display area for the hint */
+            margin: 10px 0;
+            font-style: normal;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        #Name {
+            /* Display area for the creator's name */
+            margin: 10px 0;
+            font-style: normal;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Word Guessing Game</h1>
+        <p id="Name">Marnelie D. Canicula BSIT-2D </p>
+        <p id="hint">Hint: The word starts with a letter!</p>   <!-- Displays a clue to help the user guess the word -->
+        <input type="text" id="guess-input" placeholder="Enter your guess">  <!-- Input field for the user to type their answer -->
+        <button id="submit-btn">Submit Guess</button>   <!-- Button to check the user's guess -->
+        <button id="restart-btn">Restart Game</button>   <!-- Button to reset the game -->
+        
+    <!-- Feedback div: Shows results (Win/Lose/Correct/Incorrect) -->
+    <div id="feedback"></div>
+</div>
+
+<!-- Link to the JavaScript file that contains the game logic -->
+<script src="script.js"></script>
+</body>
+</html>
